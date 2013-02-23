@@ -1,0 +1,8 @@
+- Handle actions from users who are not logged in
+- Gravity algo
+- Downvotes
+- Markdown for posts/comments
+- Profile viewing
+- Double-check escaping (profiles don't escape yet
+- Fix design issues
+- Change design for users who are not logged in
