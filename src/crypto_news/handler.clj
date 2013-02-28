@@ -3,9 +3,11 @@
         crypto-news.views
         crypto-news.settings
         ring.middleware.session.cookie
+        ring.middleware.cookies
         noir.session)
   (:require [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [noir.cookies :as cook]))
 
 (defroutes app-routes
   (GET "/" [] (index))
@@ -29,5 +31,6 @@
 (def app
   (->
     app-routes
-    (handler/site)
+    handler/site
+    cook/wrap-noir-cookies
     (wrap-noir-session {:store (cookie-store {:key session-key})})))

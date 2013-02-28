@@ -1,3 +1,6 @@
+- CONVERT SESSIONS TO SIGNED COOKIES
+
+
 - Handle actions from users who are not logged in
 - Gravity algo
 - Downvotes

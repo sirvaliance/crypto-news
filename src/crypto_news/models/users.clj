@@ -1,7 +1,10 @@
 (ns crypto-news.models.users
+  (:use crypto-news.settings)
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [noir.session :as session]
+            [noir.cookies :as cook]
+            [noir.response :as nr]
             [clj-time.core :as cltime]
             [crypto-news.models.connection :as conn]))
 
@@ -10,9 +13,11 @@
 (defn logged-in? []
   (session/get :user))
 
-
 (defn log-out! []
-  (session/clear!)) 
+  (do
+    (session/clear!)
+    (cook/put-signed! cookie-key :user {:expires 1})
+    (nr/redirect "/")))
 
 (defn new-user [user-map]
   (do

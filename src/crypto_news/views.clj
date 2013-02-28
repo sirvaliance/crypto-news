@@ -6,6 +6,7 @@
         crypto-news.settings)
   (:require [noir.response :as resp]
             [noir.session :as session]
+            [noir.cookies :as cook]
             [noir.util.crypt :as crypt]
             [clj-time.core :as cltime]
             [crypto-news.models.users :as users]
@@ -111,6 +112,7 @@
        (if (crypt/compare password (get user :password))
          (do
            (session/put! :user (get user :username))
+           (cook/put-signed! cookie-key :user (get user :username))
            (resp/redirect "/"))
          (resp/redirect "/login/"))
 
@@ -162,48 +164,50 @@
 
 (defn user-profile-edit
   [user]
-  (layout
-    [:form.form-horizontal
-     [:fieldset
-      [:legend (str "Your Profile")]
-      [:div.control-group
-       [:label.control-label {:for "username"}  "Username:"]
-       [:div.controls
-        [:span#username.uneditable-input (get user :username)]]]
-      [:div.control-group
-       [:label.control-label {:for "created"} "Created:"]
-       [:div.controls
-        [:label#created.label-pad-top (get user :created)]]]
-      [:div.control-group
-       [:label.control-label {:for "karma-comment"} "Comment Karma"]
-       [:div.controls
-        [:label#karma-comment.label-pad-top (str (get user :karma-comment))]]]
-     [:div.control-group
-      [:div.controls
-        [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]
-     [:div.control-group
-       [:label.control-label {:for "karma-submissions"} "Submission Karma"]
-       [:div.controls
-        [:label#karma-submissions.label-pad-top (str (get user :karma-submission))]]]
-     [:div.control-group
-      [:div.controls
-        [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]
-     [:div.control-group
-       [:label.control-label {:for "email"} "Email:"]
-       [:div.controls
-        [:input.span6 {:name "email" :type "text" :id "email" :placeholder "Email"  :value (get user :email)}]]]
-     [:div.control-group
-       [:label.control-label {:for "profile"} "Profile:"]
-       [:div.controls
-        [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)" :value (get user :profile)}]]]
-      [:div.control-group
-       [:label.control-label {:for "gpg-pubkey"} "GPG Public Key"]
-       [:div.controls
-        [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key" :value (get user :gpg-pubkey)}]]]
+  (if (.equals "" (users/logged-in?))
+    (resp/redirect "/login/")
+    (layout
+      [:form.form-horizontal
+       [:fieldset
+        [:legend (str "Your Profile")]
+        [:div.control-group
+         [:label.control-label {:for "username"}  "Username:"]
+         [:div.controls
+          [:span#username.uneditable-input (get user :username)]]]
+        [:div.control-group
+         [:label.control-label {:for "created"} "Created:"]
+         [:div.controls
+          [:label#created.label-pad-top (get user :created)]]]
+        [:div.control-group
+         [:label.control-label {:for "karma-comment"} "Comment Karma"]
+         [:div.controls
+          [:label#karma-comment.label-pad-top (str (get user :karma-comment))]]]
        [:div.control-group
-          [:div.controls
-             [:button.btn {:type "submit"} "Update"]]]
-     ]]))
+        [:div.controls
+          [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]
+       [:div.control-group
+         [:label.control-label {:for "karma-submissions"} "Submission Karma"]
+         [:div.controls
+          [:label#karma-submissions.label-pad-top (str (get user :karma-submission))]]]
+       [:div.control-group
+        [:div.controls
+          [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]
+       [:div.control-group
+         [:label.control-label {:for "email"} "Email:"]
+         [:div.controls
+          [:input.span6 {:name "email" :type "text" :id "email" :placeholder "Email"  :value (get user :email)}]]]
+       [:div.control-group
+         [:label.control-label {:for "profile"} "Profile:"]
+         [:div.controls
+          [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)" :value (get user :profile)}]]]
+        [:div.control-group
+         [:label.control-label {:for "gpg-pubkey"} "GPG Public Key"]
+         [:div.controls
+          [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key" :value (get user :gpg-pubkey)}]]]
+         [:div.control-group
+            [:div.controls
+               [:button.btn {:type "submit"} "Update"]]]
+       ]])))
 
 (defn user-profile-view
   [user]
@@ -217,25 +221,29 @@
       (user-profile-view user))))
 
 (defn new-post-get[]
-  (layout
-    [:form.form-horizontal {:method "POST" :action "/post/new/"}
-     [:fieldset
-       [:legend "Submit a New Post"]
-       [:div.control-group
-         [:label.control-label {:for "title"} "Title"]
-         [:div.controls
-          [:input.span6 {:name "title" :type "text" :id "title" :placeholder "Title"}]]]
-       [:div.control-group
-         [:label.control-label {:for "url"} "Url"]
-         [:div.controls
-          [:input.span6 {:name "url" :type "text" :id "url" :placeholder "Url"}]]]
-       [:div.control-group
-         [:label.control-label {:for "text"} "Self Post"]
-         [:div.controls
-          [:textarea.span6 {:name "text" :id "text" :cols "80" :rows "10" :placeholder "Enter text here for a self post"}]]]
-        [:div.control-group
-          [:div.controls
-             [:button.btn {:type "submit"} "Submit"]]]]]))                    
+  (if (.equals "" (users/logged-in?))
+    (resp/redirect "/login/")
+
+    (layout
+      [:form.form-horizontal {:method "POST" :action "/post/new/"}
+       [:fieldset
+         [:legend "Submit a New Post"]
+         [:div.control-group
+           [:label.control-label {:for "title"} "Title"]
+           [:div.controls
+            [:input.span6 {:name "title" :type "text" :id "title" :placeholder "Title"}]]]
+         [:div.control-group
+           [:label.control-label {:for "url"} "Url"]
+           [:div.controls
+            [:input.span6 {:name "url" :type "text" :id "url" :placeholder "Url"}]]]
+         [:div.control-group
+           [:label.control-label {:for "text"} "Self Post"]
+           [:div.controls
+            [:textarea.span6 {:name "text" :id "text" :cols "80" :rows "10" :placeholder "Enter text here for a self post"}]]]
+          [:div.control-group
+            [:div.controls
+               [:button.btn {:type "submit"} "Submit"]]]]])))
+
 
 (defn new-post-post [title url text]
   (if (posts/find-post-by-url url)
