@@ -9,6 +9,7 @@
             [noir.cookies :as cook]
             [noir.util.crypt :as crypt]
             [clj-time.core :as cltime]
+            [clj-time.coerce :as t-coerce]
             [crypto-news.models.users :as users]
             [crypto-news.models.posts :as posts]
             [crypto-news.models.comments :as comnt]))
@@ -29,15 +30,13 @@
           [:li 
            [:a {:href "/"} "Crypto News"]]
           [:li
-           [:a {:href "/new/"} "New"]]
-          [:li
-           [:a {:href "/comments/"} "Comments"]]
-          [:li
-           [:a {:href "/post/new/"} "Submit"]]]
+           [:a {:href "/new/"} "New Posts"]]
+          (if (users/logged-in?) [:li [:a {:href "/post/new/"} "Submit"]])
+          ]
          [:ul.nav.pull-right
             (if (users/logged-in?)
               (html5 [:li
-                      [:a {:href (str "/user/" (users/logged-in?))} (str "(421) " (users/logged-in?))]]
+                      [:a {:href (str "/user/" (users/get-username))} (str "(421) " (users/get-username))]]
                      [:li
                       [:a {:href "/logout/"} "Logout"]])
               (html5 [:li
@@ -64,8 +63,10 @@
     [:div.news-item.row-fluid
       [:div.span12
         [:div.news-item-vote
-          [:span.news-num (if (seq post-num) (str (first post-num)  "."))]
-          [:a.arrow {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]]
+            [:span.news-num (if (seq post-num) (str (first post-num)  "."))]
+          (if (users/logged-in?)
+            [:a.arrow {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"])
+        ]
         [:div.news-item-link
           [:a {:href (get post-map :url)} (get post-map :title)]
           [:span "&nbsp;"]
@@ -112,7 +113,8 @@
        (if (crypt/compare password (get user :password))
          (do
            (session/put! :user (get user :username))
-           (cook/put-signed! cookie-key :user (get user :username))
+           (session/put! :login-time (str (t-coerce/to-string (cltime/now))))
+           (cook/put-signed! (str cookie-key (session/get :login-time)) :li "true")
            (resp/redirect "/"))
          (resp/redirect "/login/"))
 
@@ -164,7 +166,7 @@
 
 (defn user-profile-edit
   [user]
-  (if (.equals "" (users/logged-in?))
+  (if (users/logged-in?)
     (resp/redirect "/login/")
     (layout
       [:form.form-horizontal
@@ -216,12 +218,12 @@
 
 (defn user-get [username]
   (let [user (users/get-user (str username))]
-    (if (and (.equals username (get user :username)) (.equals username (users/logged-in?)))
+    (if (and (.equals username (get user :username)) (.equals username (users/get-username)))
       (user-profile-edit user)
       (user-profile-view user))))
 
 (defn new-post-get[]
-  (if (.equals "" (users/logged-in?))
+  (if (users/logged-in?)
     (resp/redirect "/login/")
 
     (layout
@@ -246,13 +248,15 @@
 
 
 (defn new-post-post [title url text]
-  (if (posts/find-post-by-url url)
-    ; Throw error saying it has been used
-    (resp/redirect "/post/new/")
-    (do 
-      ;Make sure the user is logged in
-      (let [id (posts/new-post (escape-html title) (escape-html url) (escape-html text) (users/logged-in?))]
-        (resp/redirect (str "/post/" id "/"))))))
+  (if (users/logged-in?)
+    (if (posts/find-post-by-url url)
+      ; Throw error saying it has been used
+      (resp/redirect "/post/new/")
+      (do 
+        ;Make sure the user is logged in
+        (let [id (posts/new-post (escape-html title) (escape-html url) (escape-html text) (users/get-username))]
+          (resp/redirect (str "/post/" id "/")))))
+    (resp/redirect "/login/")))
   ; Check if url has already been used, if so, redirect to that submission
   ; If no url, check for text.  If no text and no url, reload the /post/new/ page
   ; If a text post, validate for proper formatting (markdown) and insert into db
@@ -272,7 +276,8 @@
          [:div.comment
            [:div.comment-head
               [:span
-                   [:a.comment-arrow {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"]
+                   (if (users/logged-in?)
+                     [:a.comment-arrow {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"])
                    [:span (str "&nbsp;" (get comment-head :karma) "&nbsp;Points&nbsp;")]
                    [:a {:href (str "/user/" (get comment-head :submitter) "/")} (get comment-head :submitter)]
                    [:span "&nbsp;"]
@@ -336,14 +341,23 @@
                  [:button.btn {:type "submit"} "Add Comment"]]]])))
 
 (defn comment-upvote [id]
-  (comnt/upvote id (users/logged-in?))
-  (resp/redirect (str "/comment/" id "/")))
+  (if (users/logged-in?)
+    (do
+      (comnt/upvote id (users/get-username))
+      (resp/redirect (str "/comment/" id "/")))
+    (resp/redirect "/login/")))
+
 
 (defn post-comment [parent-id text post-id]
-  (do
-    (comnt/new-comment post-id (users/logged-in?) (escape-html text) parent-id)
-    (resp/redirect (str "/post/" post-id "/"))))
+  (if (users/logged-in?)
+    (do
+      (comnt/new-comment post-id (users/get-username) (escape-html text) parent-id)
+      (resp/redirect (str "/post/" post-id "/")))
+    (resp/redirect "/login/")))
 
 (defn post-upvote [id]
-  (posts/upvote id (users/logged-in?))
-  (resp/redirect (str "/post/" id "/")))
+  (if (users/logged-in?)
+    (do 
+      (posts/upvote id (users/get-username))
+      (resp/redirect (str "/post/" id "/")))
+    (resp/redirect "/login/")))

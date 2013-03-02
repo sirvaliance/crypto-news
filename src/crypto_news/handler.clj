@@ -7,7 +7,14 @@
         noir.session)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
-            [noir.cookies :as cook]))
+            [noir.cookies :as cook]
+            [noir.response :as resp]
+            [crypto-news.models.users :as users]))
+(comment
+(defn check-logged-in? [handler]
+  (if (users/logged-in?)
+    (resp/redirect "/login/")))
+)
 
 (defroutes app-routes
   (GET "/" [] (index))

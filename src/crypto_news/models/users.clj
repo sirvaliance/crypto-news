@@ -11,12 +11,27 @@
 (conn/db-connect)
 
 (defn logged-in? []
-  (session/get :user))
+  (let [li (cook/get-signed 
+             (str cookie-key (session/get :login-time))
+             :li)]
+    (if-not (nil? li)
+      (if (.equals "true" li)
+        true
+        false)
+      false)))
+
+(defn get-username []
+  (if (logged-in?)
+    (session/get :user)
+    (str "")))
 
 (defn log-out! []
   (do
     (session/clear!)
-    (cook/put-signed! cookie-key :user {:expires 1})
+    (cook/put-signed!
+             (str cookie-key (session/get :login-time))
+             :li 
+             "false")
     (nr/redirect "/")))
 
 (defn new-user [user-map]
