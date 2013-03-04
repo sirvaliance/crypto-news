@@ -4,7 +4,8 @@ body {
 }
 #menu{
     margin-bottom: 20px;
-    position: static;
+    /*position: static;*/
+    position: relative;
 }
 
 #title {
@@ -18,13 +19,16 @@ body {
     border-bottom: 1px solid #eee;
     position: relative;
 }
-.arrow {
-    color: green;
+.arrow-up {
     display: block;
     float: right;
     font-size: 1.2em;
 }
-
+.arrow-down {
+    display: block;
+    float: right;
+    font-size: 1.2em;
+}
 .comment-arrow {
     color: green;
     font-size: 1.2em;
@@ -41,6 +45,10 @@ body {
 .news-num {
     float: left;
     display: block;
+    font-weight: 700;
+    color: #ddd;
+    font-size: 34px;
+    line-height: 34px;
 }
 .news-item-link {
     margin-left: 54px;

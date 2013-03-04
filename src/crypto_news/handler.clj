@@ -2,32 +2,37 @@
   (:use compojure.core
         crypto-news.settings
         ring.middleware.session.cookie
-        ring.middleware.cookies
-        noir.session)
+        ring.middleware.cookies)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [noir.cookies :as cook]
             [noir.response :as resp]
+            [noir.session :as sesh]
             [crypto-news.views.index :as views-inx]
             [crypto-news.views.posts :as views-pst]
             [crypto-news.views.users :as views-usr]
             [crypto-news.views.auth :as views-ath]
             [crypto-news.models.users :as users]))
-(comment
-(defn check-logged-in? [handler]
-  (if (users/logged-in?)
-    (resp/redirect "/login/")))
-)
 
 (defroutes app-routes
   (GET "/" [] (views-inx/index))
   (GET "/login/" [] (views-ath/login-get))
-  (POST "/login/" [input-username input-password] (views-ath/login-post input-username input-password))
+  (POST "/login/" [input-username input-password] (views-ath/login-post 
+                                                    input-username 
+                                                    input-password))
   (GET "/logout/" [] (views-ath/logout-get))
   (GET "/signup/" [] (views-ath/signup-get))
   (POST "/signup/" [input-username input-password input-password-confirm]
-       (views-ath/signup-post input-username input-password input-password-confirm))
-  (GET "/user/:username" [username] (views-usr/user-get username))
+       (views-ath/signup-post 
+         input-username 
+         input-password 
+         input-password-confirm))
+  (GET "/user/:username" [username] (views-usr/user-get 
+                                      username))
+  (POST "/user/update/" [email profile gpg-pubkey] (views-usr/user-update 
+                                                     email 
+                                                     profile 
+                                                     gpg-pubkey))
   (GET "/post/new/" [] (views-pst/new-post-get))
   (POST "/post/new/" [title url text] (views-pst/new-post-post title url text))
   (GET "/post/:id/" [id] (views-pst/get-post-get id))
@@ -43,4 +48,4 @@
     app-routes
     handler/site
     cook/wrap-noir-cookies
-    (wrap-noir-session {:store (cookie-store {:key session-key})})))
+    (sesh/wrap-noir-session {:store (cookie-store {:key session-key})})))

@@ -20,7 +20,7 @@
 (defn user-profile-edit
   [user]
     (layout
-      [:form.form-horizontal
+      [:form.form-horizontal {:action "/user/update/" :method "POST"}
        [:fieldset
         [:legend (str "Your Profile")]
         [:div.control-group
@@ -61,6 +61,10 @@
             [:div.controls
                [:button.btn {:type "submit"} "Update"]]]
        ]]))
+
+(defn user-update
+  [email profile gpg-pubkey]
+  (println email))
 
 (defn user-profile-view
   [user]

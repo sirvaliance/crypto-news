@@ -21,9 +21,13 @@
     [:div.news-item.row-fluid
       [:div.span12
         [:div.news-item-vote
-            [:span.news-num (if (seq post-num) (str (first post-num)  "."))]
+            [:span.news-num (if (seq post-num) (str (first post-num)))]
           (if (users/logged-in?)
-            [:a.arrow {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"])
+            (html5
+              [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
+              [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]
+              ))
+
         ]
         [:div.news-item-link
           [:a {:href (get post-map :url)} (get post-map :title)]
@@ -36,8 +40,7 @@
            [:a {:href (str "/user/" (get post-map :submitter))} (get post-map :submitter)]]
           [:span (string-date-formater (get post-map :created))]
           [:span
-           [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]]]
-      ]))
+           [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]]]]))
 
 (defn index []
   (layout

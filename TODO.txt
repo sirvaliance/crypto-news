@@ -9,3 +9,6 @@
 - Double-check escaping (profiles don't escape yet
 - Fix design issues
 - Change design for users who are not logged in
+
+
+- Ask CN vs. Link submission
