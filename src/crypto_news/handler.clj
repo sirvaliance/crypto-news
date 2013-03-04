@@ -1,6 +1,5 @@
 (ns crypto-news.handler
   (:use compojure.core
-        crypto-news.views
         crypto-news.settings
         ring.middleware.session.cookie
         ring.middleware.cookies
@@ -9,6 +8,10 @@
             [compojure.route :as route]
             [noir.cookies :as cook]
             [noir.response :as resp]
+            [crypto-news.views.index :as views-inx]
+            [crypto-news.views.posts :as views-pst]
+            [crypto-news.views.users :as views-usr]
+            [crypto-news.views.auth :as views-ath]
             [crypto-news.models.users :as users]))
 (comment
 (defn check-logged-in? [handler]
@@ -17,21 +20,21 @@
 )
 
 (defroutes app-routes
-  (GET "/" [] (index))
-  (GET "/login/" [] (login-get))
-  (POST "/login/" [input-username input-password] (login-post input-username input-password))
-  (GET "/logout/" [] (logout-get))
-  (GET "/signup/" [] (signup-get))
+  (GET "/" [] (views-inx/index))
+  (GET "/login/" [] (views-ath/login-get))
+  (POST "/login/" [input-username input-password] (views-ath/login-post input-username input-password))
+  (GET "/logout/" [] (views-ath/logout-get))
+  (GET "/signup/" [] (views-ath/signup-get))
   (POST "/signup/" [input-username input-password input-password-confirm]
-       (signup-post input-username input-password input-password-confirm))
-  (GET "/user/:username" [username] (user-get username))
-  (GET "/post/new/" [] (new-post-get))
-  (POST "/post/new/" [title url text] (new-post-post title url text))
-  (GET "/post/:id/" [id] (get-post-get id))
-  (GET "/post/:id/vote/up/" [id] (post-upvote id))
-  (GET "/comment/:id/" [id] (comment-get id))
-  (POST "/comment/:id/" [parent-id text post-id] (post-comment parent-id text post-id))
-  (GET "/comment/:id/vote/up/" [id] (comment-upvote id))
+       (views-ath/signup-post input-username input-password input-password-confirm))
+  (GET "/user/:username" [username] (views-usr/user-get username))
+  (GET "/post/new/" [] (views-pst/new-post-get))
+  (POST "/post/new/" [title url text] (views-pst/new-post-post title url text))
+  (GET "/post/:id/" [id] (views-pst/get-post-get id))
+  (GET "/post/:id/vote/up/" [id] (views-pst/post-upvote id))
+  (GET "/comment/:id/" [id] (views-pst/comment-get id))
+  (POST "/comment/:id/" [parent-id text post-id] (views-pst/post-comment parent-id text post-id))
+  (GET "/comment/:id/vote/up/" [id] (views-pst/comment-upvote id))
   (route/files "/" {:root "resources/public"})
   (route/not-found "Not Found"))
 
