@@ -19,8 +19,6 @@
 
 (defn user-profile-edit
   [user]
-  (if (users/logged-in?)
-    (resp/redirect "/login/")
     (layout
       [:form.form-horizontal
        [:fieldset
@@ -28,7 +26,7 @@
         [:div.control-group
          [:label.control-label {:for "username"}  "Username:"]
          [:div.controls
-          [:span#username.uneditable-input (get user :username)]]]
+          [:label#username.label-pad-top (get user :username)]]]
         [:div.control-group
          [:label.control-label {:for "created"} "Created:"]
          [:div.controls
@@ -62,16 +60,53 @@
          [:div.control-group
             [:div.controls
                [:button.btn {:type "submit"} "Update"]]]
-       ]])))
+       ]]))
 
 (defn user-profile-view
   [user]
-  (layout 
-    [:h1 (str "Profile for " (get user :username))]))
+  (layout
+    [:form.form-horizontal
+     [:fieldset
+      [:legend (str "Profile for " (get user :username))]
+      [:div.control-group
+       [:label.control-label {:for "username"}  "Username:"]
+       [:div.controls
+        [:label#username.label-pad-top (get user :username)]]]
+      [:div.control-group
+       [:label.control-label {:for "created"} "Created:"]
+       [:div.controls
+        [:label#created.label-pad-top (get user :created)]]]
+      [:div.control-group
+       [:label.control-label {:for "karma-comment"} "Comment Karma"]
+       [:div.controls
+        [:label#karma-comment.label-pad-top (str (get user :karma-comment))]]]
+     [:div.control-group
+      [:div.controls
+        [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]
+     [:div.control-group
+       [:label.control-label {:for "karma-submissions"} "Submission Karma"]
+       [:div.controls
+        [:label#karma-submissions.label-pad-top (str (get user :karma-submission))]]]
+     [:div.control-group
+      [:div.controls
+        [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]
+     [:div.control-group
+       [:label.control-label {:for "email"} "Email:"]
+       [:div.controls
+        [:label {:name "email" :type "text" :id "email"} (get user :email)]]]
+     [:div.control-group
+       [:label.control-label {:for "profile"} "Profile:"]
+       [:div.controls
+        [:pre.span6 (get user :profile)]]]
+      [:div.control-group
+       [:label.control-label {:for "gpg-pubkey"} "GPG Public Key"]
+       [:div.controls
+        [:pre.span6 (get user :gpg-pubkey)]]]
+     ]]))
 
 (defn user-get [username]
   (let [user (users/get-user (str username))]
-    (if (and (.equals username (get user :username)) (.equals username (users/get-username)))
+    (if (and (users/logged-in?) (.equals username (get user :username)) (.equals username (users/get-username)))
       (user-profile-edit user)
       (user-profile-view user))))
 

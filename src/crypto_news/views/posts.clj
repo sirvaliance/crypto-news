@@ -20,7 +20,7 @@
 
 
 (defn new-post-get[]
-  (if (users/logged-in?)
+  (if-not (users/logged-in?)
     (resp/redirect "/login/")
 
     (layout
