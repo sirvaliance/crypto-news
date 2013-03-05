@@ -20,7 +20,7 @@
 (defn user-profile-edit
   [user]
     (layout
-      [:form.form-horizontal {:action "/user/update/" :method "POST"}
+      [:form.form-horizontal {:action (str "/user/" (get user :username) "/") :method "POST"}
        [:fieldset
         [:legend (str "Your Profile")]
         [:div.control-group
@@ -52,19 +52,29 @@
        [:div.control-group
          [:label.control-label {:for "profile"} "Profile:"]
          [:div.controls
-          [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)" :value (get user :profile)}]]]
+          [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)"} (get user :profile)]]]
         [:div.control-group
          [:label.control-label {:for "gpg-pubkey"} "GPG Public Key"]
          [:div.controls
-          [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key" :value (get user :gpg-pubkey)}]]]
+          [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key"} (get user :gpg-pubkey)]]]
          [:div.control-group
             [:div.controls
                [:button.btn {:type "submit"} "Update"]]]
        ]]))
 
 (defn user-update
-  [email profile gpg-pubkey]
-  (println email))
+  [username email profile gpg-pubkey]
+  ;Needs to verify that this is the correct user
+  (let [email (escape-html email)
+        profile (escape-html profile)
+        gpg-pubkey (escape-html gpg-pubkey)]
+    (do
+      (users/update-user    username
+                            email
+                            profile
+                            gpg-pubkey)
+      (resp/redirect "/"))))
+
 
 (defn user-profile-view
   [user]
@@ -108,10 +118,56 @@
         [:pre.span6 (get user :gpg-pubkey)]]]
      ]]))
 
+(defn user-profile-view-2
+  [user]
+  (layout
+     [:h2 ]
+     [:table.table.table-bordered
+      [:thead
+       [:th (str "Profile for " (get user :username))]]
+      [:tbody
+        [:tr
+         [:td "Username:"]
+         [:td [:span.span6 (get user :username)]]]
+        [:tr
+         [:td "Created:"]
+         [:td [:span.span6 (get user :created)]]]
+        [:tr 
+         [:td "Comment Karma"]
+         [:td [:span.span6 (str (get user :karma-comment))]]]
+        [:tr
+         [:td]
+         [:td
+          [:span.span6
+            [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]]
+        [:tr
+         [:td "Submission Karma"]
+         [:td 
+          [:span.span6 (str (get user :karma-submission))]]]
+        [:tr
+         [:td]
+         [:td
+          [:span.span6 
+            [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]]
+         [:tr
+          [:td "Email:"]
+          [:td 
+           [:span.span6 (get user :email)]]]
+         [:tr
+          [:td "Profile:"]
+          [:td 
+           [:pre.span6 (get user :profile)]]]
+         [:tr
+          [:td "GPG Public Key"]
+          [:td
+           [:pre.span6 (get user :gpg-pubkey)]]]
+     ]]))
+
+
 (defn user-get [username]
   (let [user (users/get-user (str username))]
     (if (and (users/logged-in?) (.equals username (get user :username)) (.equals username (users/get-username)))
       (user-profile-edit user)
-      (user-profile-view user))))
+      (user-profile-view-2 user))))
 
 

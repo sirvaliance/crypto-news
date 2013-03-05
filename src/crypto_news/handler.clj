@@ -27,9 +27,10 @@
          input-username 
          input-password 
          input-password-confirm))
-  (GET "/user/:username" [username] (views-usr/user-get 
+  (GET "/user/:username/" [username] (views-usr/user-get 
                                       username))
-  (POST "/user/update/" [email profile gpg-pubkey] (views-usr/user-update 
+  (POST "/user/:username/" [username email profile gpg-pubkey] (views-usr/user-update 
+                                                     username
                                                      email 
                                                      profile 
                                                      gpg-pubkey))

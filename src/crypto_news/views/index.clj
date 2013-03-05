@@ -37,7 +37,7 @@
           [:span (str (get post-map :karma) " Points")]
           [:span "by"]
           [:span
-           [:a {:href (str "/user/" (get post-map :submitter))} (get post-map :submitter)]]
+           [:a {:href (str "/user/" (get post-map :submitter) "/")} (get post-map :submitter)]]
           [:span (string-date-formater (get post-map :created))]
           [:span
            [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]]]]))

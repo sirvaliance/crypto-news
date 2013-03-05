@@ -36,7 +36,7 @@
          [:ul.nav.pull-right
             (if (users/logged-in?)
               (html5 [:li
-                      [:a {:href (str "/user/" (users/get-username))} (str "(421) " (users/get-username))]]
+                      [:a {:href (str "/user/" (users/get-username) "/")} (str "(CHANGE TO KARM) " (users/get-username))]]
                      [:li
                       [:a {:href "/logout/"} "Logout"]])
               (html5 [:li

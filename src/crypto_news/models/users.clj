@@ -1,5 +1,6 @@
 (ns crypto-news.models.users
-  (:use crypto-news.settings)
+ (:use monger.operators
+       crypto-news.settings)
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [noir.session :as session]
@@ -52,3 +53,13 @@
     (let [user-map (mc/find-maps "user" {:username username})]
       (if (= (count user-map) 1)
         (first user-map)))))
+
+
+;; ESCAPE!!!!!!
+(defn update-user [username
+                   email
+                   profile
+                   gpg-pubkey]
+ (mc/update "user" 
+            {:username username} 
+            {$set {:email email :profile profile :gpg-pubkey gpg-pubkey}}))

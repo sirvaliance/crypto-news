@@ -28,6 +28,10 @@ body {
     display: block;
     float: right;
     font-size: 1.2em;
+    
+}
+.arrow-up:hover, .arrow-down:hover {
+    text-decoration: none;
 }
 .comment-arrow {
     color: green;
