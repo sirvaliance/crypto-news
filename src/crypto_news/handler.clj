@@ -38,9 +38,13 @@
   (POST "/post/new/" [title url text] (views-pst/new-post-post title url text))
   (GET "/post/:id/" [id] (views-pst/get-post-get id))
   (GET "/post/:id/vote/up/" [id] (views-pst/post-upvote id))
+  (GET "/post/:id/vote/down/" [id] (views-pst/post-downvote id))
+
   (GET "/comment/:id/" [id] (views-pst/comment-get id))
   (POST "/comment/:id/" [parent-id text post-id] (views-pst/post-comment parent-id text post-id))
   (GET "/comment/:id/vote/up/" [id] (views-pst/comment-upvote id))
+  (GET "/comment/:id/vote/down/" [id] (views-pst/comment-downvote id))
+
   (route/files "/" {:root "resources/public"})
   (route/not-found "Not Found"))
 

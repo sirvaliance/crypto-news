@@ -50,3 +50,9 @@
       (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
           (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username 1)} $inc {:karma 1}})))))
 
+(defn downvote [id username]
+  (do 
+    (let [post (mc/find-map-by-id "posts" id)]
+      (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
+          (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username -1)} $inc {:karma -1}})))))
+

@@ -74,7 +74,10 @@
            [:div.comment-head
               [:span
                    (if (users/logged-in?)
-                     [:a.comment-arrow {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"])
+                     (html5
+                        [:a.arrow-up {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"]
+                        [:a.arrow-down {:href (str "/comment/" (get comment-head :_id) "/vote/down/")} "&#x25BC;"]))
+
                    [:span (str "&nbsp;" (get comment-head :karma) "&nbsp;Points&nbsp;")]
                    [:a {:href (str "/user/" (get comment-head :submitter) "/")} (get comment-head :submitter)]
                    [:span "&nbsp;"]
@@ -146,6 +149,13 @@
       (resp/redirect (str "/comment/" id "/")))
     (resp/redirect "/login/")))
 
+(defn comment-downvote [id]
+  (if (users/logged-in?)
+    (do
+      (comnt/downvote id (users/get-username))
+      (resp/redirect (str "/comment/" id "/")))
+    (resp/redirect "/login/")))
+
 
 (defn post-comment [parent-id text post-id]
   (if (users/logged-in?)
@@ -158,5 +168,12 @@
   (if (users/logged-in?)
     (do 
       (posts/upvote id (users/get-username))
+      (resp/redirect (str "/post/" id "/")))
+    (resp/redirect "/login/")))
+
+(defn post-downvote [id]
+  (if (users/logged-in?)
+    (do 
+      (posts/downvote id (users/get-username))
       (resp/redirect (str "/post/" id "/")))
     (resp/redirect "/login/")))

@@ -42,3 +42,9 @@
       (if-not (or (.equals username (get comment :submitter)) (contains? (get comment :votes) (keyword username)))
           (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username 1)} $inc {:karma 1}})))))
 
+(defn downvote [id username]
+  (do 
+    (let [comment (mc/find-map-by-id "comments" id)]
+      (if-not (or (.equals username (get comment :submitter)) (contains? (get comment :votes) (keyword username)))
+          (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username -1)} $inc {:karma -1}})))))
+
