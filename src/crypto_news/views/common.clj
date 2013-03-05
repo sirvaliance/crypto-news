@@ -20,7 +20,8 @@
      [:title "Crypto News"]
       (include-css "/css/bootstrap.min.css")
       (include-css "/css/bootstrap-responsive.min.css")
-      (include-css "/css/style.css")]
+      (include-css "/css/style.css")
+      (include-js "/js/jquery-1.9.1.min.js")]
     [:body
      [:div#menu.navbar.navbar-fixed-top
       [:div.navbar-inner
