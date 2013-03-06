@@ -33,6 +33,15 @@ body {
 .arrow-up:hover, .arrow-down:hover {
     text-decoration: none;
 }
+
+.comment  .arrow-up {
+    float: left;
+}
+
+.comment  .arrow-down {
+    float: left;
+}
+
 .comment-arrow {
     color: green;
     font-size: 1.2em;

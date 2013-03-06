@@ -112,19 +112,23 @@
 
 (defn render-comment [com-map]
   (html5
+    
     [:div.comment-block
      [:div.comment
        [:div.comment-head
-          [:span
-               [:a.arrow {:href (str "/comment/" (get com-map :_id) "/vote/up/")} "&#x25B2;"]
-               [:span "&nbsp;"]
-               [:a {:href (str "/user/" (get com-map :submitter) "/")} (get com-map :submitter)]
-               [:span "&nbsp;"]
-               [:span (string-date-formater (get com-map :created))]
-               [:span "&nbsp;|&nbsp;"]
-               [:a {:href (str "/comment/" (get com-map :_id) "/")} "Link/Reply"]]]
-               
-       [:div.comment-body
+        [:span
+       (if (users/logged-in?)
+         (html5
+            [:a.arrow-up {:href (str "/comment/" (get com-map :_id) "/vote/up/")} "&#x25B2;"]
+            [:a.arrow-down {:href (str "/comment/" (get com-map :_id) "/vote/down/")} "&#x25BC;"]))]
+
+       [:span (str "&nbsp;" (get com-map :karma) "&nbsp;Points&nbsp;")]
+       [:a {:href (str "/user/" (get com-map :submitter) "/")} (get com-map :submitter)]
+       [:span "&nbsp;"]
+       [:span (string-date-formater (get com-map :created))]
+       [:span "&nbsp;|&nbsp;"]
+       [:a {:href (str "/comment/" (get com-map :_id) "/")} "Link/Reply"]]
+      [:div.comment-body
         [:span (get com-map :text)]]]]))
 
 
