@@ -36,22 +36,22 @@
            [:div.controls
             [:input.span6 {:name "url" :type "text" :id "url" :placeholder "Url"}]]]
          [:div.control-group
-           [:label.control-label {:for "text"} "Self Post"]
+           [:label.control-label {:for "post-text"} "Self Post"]
            [:div.controls
-            [:textarea.span6 {:name "text" :id "text" :cols "80" :rows "10" :placeholder "Enter text here for a self post"}]]]
+            [:textarea.span6 {:name "post-text" :id "post-text" :cols "80" :rows "10" :placeholder "Enter text here for a self post"}]]]
           [:div.control-group
             [:div.controls
                [:button.btn {:type "submit"} "Submit"]]]]])))
 
 
-(defn new-post-post [title url text]
+(defn new-post-post [title url post-text]
   (if (users/logged-in?)
     (if (posts/find-post-by-url url)
       ; Throw error saying it has been used
       (resp/redirect "/post/new/")
       (do 
         ;Make sure the user is logged in
-        (let [id (posts/new-post (escape-html title) (escape-html url) (escape-html text) (users/get-username))]
+        (let [id (posts/new-post (escape-html title) (escape-html url) (escape-html post-text) (users/get-username))]
           (resp/redirect (str "/post/" id "/")))))
     (resp/redirect "/login/")))
   ; Check if url has already been used, if so, redirect to that submission
@@ -95,6 +95,7 @@
         comments (comnt/get-comment-all id)]
     (layout
       (views-idx/render-index-post post-map)
+      [:div.post-text (get post-map :text)]
       (if (users/logged-in?)
         (html5
           [:form {:method "POST" :action (str "/comment/" id "/")}

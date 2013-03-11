@@ -35,7 +35,7 @@
                                                      profile 
                                                      gpg-pubkey))
   (GET "/post/new/" [] (views-pst/new-post-get))
-  (POST "/post/new/" [title url text] (views-pst/new-post-post title url text))
+  (POST "/post/new/" [title url post-text] (views-pst/new-post-post title url post-text))
   (GET "/post/:id/" [id] (views-pst/get-post-get id))
   (GET "/post/:id/vote/up/" [id] (views-pst/post-upvote id))
   (GET "/post/:id/vote/down/" [id] (views-pst/post-downvote id))

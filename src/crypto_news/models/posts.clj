@@ -18,14 +18,14 @@
       (if-not (empty? post-map)
         (post-map)))))
 
-(defn new-post [title url text username]
+(defn new-post [title url post-text username]
   (do
     (let [id (mu/random-uuid)]
       (mc/insert "posts" {:_id id 
                           :title title 
                           :url (if (.equals "" url) (str "/post/" id "/") url)
                           :url-host (if-not (.equals "" url) (urly/host-of (urly/url-like url)) "")
-                          :text text 
+                          :text post-text 
                           :created (cltime/now)
                           :karma 0
                           :comments 0

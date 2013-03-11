@@ -16,7 +16,7 @@ body {
 }
 .news-item {
     margin: 5px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f5f5f5;
     position: relative;
 }
 .arrow-up {
@@ -91,4 +91,10 @@ body {
 
 .comment-body {
     padding: 5px;
+}
+
+
+#main-footer {
+    margin-top: 20px;
+    border-top: solid 2px #ddd;
 }

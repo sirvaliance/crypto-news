@@ -48,6 +48,8 @@
 
      [:div#main-wrapper.container.container-fluid
       [:div#content
-       content]]]))
+       content]]
+     [:div#main-footer.container.container-fludi
+      "Footer Stuff"]]))
 
 
