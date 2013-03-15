@@ -70,15 +70,13 @@
       (for [comment-head comm-seq]
        (if-not (= 0 (count comm-seq))
         [:div.comment-block
+         [:div.comment-arrows
+            [:a.arrow-up {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"]
+            [:a.arrow-down {:href (str "/comment/" (get comment-head :_id) "/vote/down/")} "&#x25BC;"]]
          [:div.comment
            [:div.comment-head
               [:span
-                   (if (users/logged-in?)
-                     (html5
-                        [:a.arrow-up {:href (str "/comment/" (get comment-head :_id) "/vote/up/")} "&#x25B2;"]
-                        [:a.arrow-down {:href (str "/comment/" (get comment-head :_id) "/vote/down/")} "&#x25BC;"]))
-
-                   [:span (str "&nbsp;" (get comment-head :karma) "&nbsp;Points&nbsp;")]
+                   [:span (str (get comment-head :karma) "&nbsp;Points&nbsp;")]
                    [:a {:href (str "/user/" (get comment-head :submitter) "/")} (get comment-head :submitter)]
                    [:span "&nbsp;"]
                    [:span (string-date-formater (get comment-head :created))]
@@ -95,18 +93,17 @@
         comments (comnt/get-comment-all id)]
     (layout
       (views-idx/render-index-post post-map)
+      [:div.div-filler]
       [:div.post-text (get post-map :text)]
-      (if (users/logged-in?)
-        (html5
-          [:form {:method "POST" :action (str "/comment/" id "/")}
-             [:input {:type "hidden" :name "parent-id" :value id}]
-             [:input {:type "hidden" :name "post-id" :value id}]
-             [:div.control-group
-               [:div.controls
-                [:textarea.span6 {:name "text" :id "text" :cols "80" :rows "10" :placeholder "Enter Comment"}]]]
-              [:div.control-group
-                [:div.controls
-                   [:button.btn {:type "submit"} "Add Comment"]]]]))
+        [:form {:method "POST" :action (str "/comment/" id "/")}
+           [:input {:type "hidden" :name "parent-id" :value id}]
+           [:input {:type "hidden" :name "post-id" :value id}]
+           [:div.control-group
+             [:div.controls
+              [:textarea.span6 {:name "text" :id "text" :cols "80" :rows "10" :placeholder "Enter Comment"}]]]
+            [:div.control-group
+              [:div.controls
+                 [:button.btn {:type "submit"} "Add Comment"]]]]
         (build-comment-tree id comments)
       )))
 

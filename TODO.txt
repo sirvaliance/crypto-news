@@ -12,3 +12,6 @@ x Profile viewing
 
 
 - Ask CN vs. Link submission
+
+
+- Inc/dec user's comment and submission karma

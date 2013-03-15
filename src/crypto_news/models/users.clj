@@ -63,3 +63,9 @@
  (mc/update "user" 
             {:username username} 
             {$set {:email email :profile profile :gpg-pubkey gpg-pubkey}}))
+
+(defn change-comment-karma [username amnt]
+  (mc/update "user" {:username username} {$inc {:karma-comment amnt}}))
+
+(defn change-submission-karma [username amnt]
+  (mc/update "user" {:username username} {$inc {:karma-submission amnt}}))

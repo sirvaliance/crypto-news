@@ -8,6 +8,7 @@
             [clj-time.core :as cltime]
             [monger.joda-time]
             [crypto-news.models.connection :as conn]
+            [crypto-news.models.users :as users]
             [clojurewerkz.urly.core :as urly]))
 
 (conn/db-connect)
@@ -48,11 +49,18 @@
   (do 
     (let [post (mc/find-map-by-id "posts" id)]
       (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
-          (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username 1)} $inc {:karma 1}})))))
+          (do
+            (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username 1)} $inc {:karma 1}})
+            (users/change-submission-karma (get post :submitter) 1))))))
+
 
 (defn downvote [id username]
   (do 
     (let [post (mc/find-map-by-id "posts" id)]
       (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
-          (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username -1)} $inc {:karma -1}})))))
+          (do
+            (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username -1)} $inc {:karma -1}})
+            (users/change-submission-karma (get post :submitter) -1)
+            )))))
+
 

@@ -7,7 +7,8 @@
             [noir.session :as session]
             [clj-time.core :as cltime]
             [monger.joda-time]
-            [crypto-news.models.connection :as conn]))
+            [crypto-news.models.connection :as conn]
+            [crypto-news.models.users :as users]))
 
 (conn/db-connect)
 
@@ -40,11 +41,15 @@
   (do 
     (let [comment (mc/find-map-by-id "comments" id)]
       (if-not (or (.equals username (get comment :submitter)) (contains? (get comment :votes) (keyword username)))
-          (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username 1)} $inc {:karma 1}})))))
+        (do
+          (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username 1)} $inc {:karma 1}})
+          (users/change-comment-karma (get comment :submitter) 1))))))
 
 (defn downvote [id username]
   (do 
     (let [comment (mc/find-map-by-id "comments" id)]
       (if-not (or (.equals username (get comment :submitter)) (contains? (get comment :votes) (keyword username)))
-          (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username -1)} $inc {:karma -1}})))))
+          (do
+            (mc/update "comments" {:_id id} {$set {:votes (assoc (get comment :votes) username -1)} $inc {:karma -1}})
+            (users/change-comment-karma (get comment :submitter) -1))))))
 
