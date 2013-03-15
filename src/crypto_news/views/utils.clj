@@ -10,6 +10,6 @@
       (if (>= minutes 60) 
         (str (int (/ minutes 60.0)) " Hours Ago")
         (str minutes " Minutes Ago")))))
-      
+
 
 

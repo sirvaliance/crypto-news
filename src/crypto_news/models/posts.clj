@@ -1,6 +1,6 @@
 (ns crypto-news.models.posts
- (:use monger.operators)
- (:require [monger.core :as mg]
+  (:use monger.operators)
+  (:require [monger.core :as mg]
             [monger.collection :as mc]
             [monger.conversion :as mcon]
             [monger.util :as mu]
@@ -49,18 +49,18 @@
   (do 
     (let [post (mc/find-map-by-id "posts" id)]
       (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
-          (do
-            (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username 1)} $inc {:karma 1}})
-            (users/change-submission-karma (get post :submitter) 1))))))
+        (do
+          (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username 1)} $inc {:karma 1}})
+          (users/change-submission-karma (get post :submitter) 1))))))
 
 
 (defn downvote [id username]
   (do 
     (let [post (mc/find-map-by-id "posts" id)]
       (if-not (or (.equals username (get post :submitter)) (contains? (get post :votes) (keyword username)))
-          (do
-            (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username -1)} $inc {:karma -1}})
-            (users/change-submission-karma (get post :submitter) -1)
-            )))))
+        (do
+          (mc/update "posts" {:_id id} {$set {:votes (assoc (get post :votes) username -1)} $inc {:karma -1}})
+          (users/change-submission-karma (get post :submitter) -1)
+          )))))
 
 

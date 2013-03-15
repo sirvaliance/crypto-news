@@ -1,6 +1,6 @@
 (ns crypto-news.models.users
- (:use monger.operators
-       crypto-news.settings)
+  (:use monger.operators
+        crypto-news.settings)
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [noir.session :as session]
@@ -30,9 +30,9 @@
   (do
     (session/clear!)
     (cook/put-signed!
-             (str cookie-key (session/get :login-time))
-             :li 
-             "false")
+      (str cookie-key (session/get :login-time))
+      :li 
+      "false")
     (nr/redirect "/")))
 
 (defn new-user [user-map]
@@ -60,9 +60,9 @@
                    email
                    profile
                    gpg-pubkey]
- (mc/update "user" 
-            {:username username} 
-            {$set {:email email :profile profile :gpg-pubkey gpg-pubkey}}))
+  (mc/update "user" 
+             {:username username} 
+             {$set {:email email :profile profile :gpg-pubkey gpg-pubkey}}))
 
 (defn change-comment-karma [username amnt]
   (mc/update "user" {:username username} {$inc {:karma-comment amnt}}))

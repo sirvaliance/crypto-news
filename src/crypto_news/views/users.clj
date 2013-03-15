@@ -19,51 +19,51 @@
 
 (defn user-profile-edit
   [user]
-    (layout
-      [:form.form-horizontal {:action (str "/user/" (get user :username) "/") :method "POST"}
-      [:table.table.table-bordered
-        [:thead
-         [:th (str "Profile for " (get user :username))]]
-        [:tbody
-          [:tr
-           [:td "Username:"]
-           [:td [:span.span6 (get user :username)]]]
-          [:tr
-           [:td "Created:"]
-           [:td [:span.span6 (get user :created)]]]
-          [:tr 
-           [:td "Comment Karma"]
-           [:td [:span.span6 (str (get user :karma-comment))]]]
-          [:tr
-           [:td]
-           [:td
-            [:span.span6
-              [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]]
-          [:tr
-           [:td "Submission Karma"]
-           [:td 
-            [:span.span6 (str (get user :karma-submission))]]]
-          [:tr
-           [:td]
-           [:td
-            [:span.span6 
-              [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]]
-           [:tr
-            [:td "Email:"]
-            [:td 
-              [:input.span6 {:name "email" :type "text" :id "email" :placeholder "Email"  :value (get user :email)}]]]
-           [:tr
-            [:td "Profile:"]
-            [:td 
-              [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)"} (get user :profile)]]]
-           [:tr
-            [:td "GPG Public Key"]
-            [:td
-              [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key"} (get user :gpg-pubkey)]]]
-           [:tr
-            [:td]
-            [:td 
-             [:button.btn {:type "submit"} "Update"]]]]]]))
+  (layout
+    [:form.form-horizontal {:action (str "/user/" (get user :username) "/") :method "POST"}
+     [:table.table.table-bordered
+      [:thead
+       [:th (str "Profile for " (get user :username))]]
+      [:tbody
+       [:tr
+        [:td "Username:"]
+        [:td [:span.span6 (get user :username)]]]
+       [:tr
+        [:td "Created:"]
+        [:td [:span.span6 (get user :created)]]]
+       [:tr 
+        [:td "Comment Karma"]
+        [:td [:span.span6 (str (get user :karma-comment))]]]
+       [:tr
+        [:td]
+        [:td
+         [:span.span6
+          [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]]
+       [:tr
+        [:td "Submission Karma"]
+        [:td 
+         [:span.span6 (str (get user :karma-submission))]]]
+       [:tr
+        [:td]
+        [:td
+         [:span.span6 
+          [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]]
+       [:tr
+        [:td "Email:"]
+        [:td 
+         [:input.span6 {:name "email" :type "text" :id "email" :placeholder "Email"  :value (get user :email)}]]]
+       [:tr
+        [:td "Profile:"]
+        [:td 
+         [:textarea.span6 {:name "profile" :id "profile" :cols "80" :rows "10" :placeholder "Profile Info (Links, Twitter, Etc)"} (get user :profile)]]]
+       [:tr
+        [:td "GPG Public Key"]
+        [:td
+         [:textarea.span6 {:name "gpg-pubkey" :id "gpg-pubkey" :cols "80" :rows "10" :placeholder "Your GPG Public Key"} (get user :gpg-pubkey)]]]
+       [:tr
+        [:td]
+        [:td 
+         [:button.btn {:type "submit"} "Update"]]]]]]))
 
 (defn user-update
   [username email profile gpg-pubkey]
@@ -73,9 +73,9 @@
         gpg-pubkey (escape-html gpg-pubkey)]
     (do
       (users/update-user    username
-                            email
-                            profile
-                            gpg-pubkey)
+                         email
+                         profile
+                         gpg-pubkey)
       (resp/redirect (str "/user/" username "/")))))
 
 
@@ -97,21 +97,21 @@
        [:label.control-label {:for "karma-comment"} "Comment Karma"]
        [:div.controls
         [:label#karma-comment.label-pad-top (str (get user :karma-comment))]]]
-     [:div.control-group
-      [:div.controls
+      [:div.control-group
+       [:div.controls
         [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]
-     [:div.control-group
+      [:div.control-group
        [:label.control-label {:for "karma-submissions"} "Submission Karma"]
        [:div.controls
         [:label#karma-submissions.label-pad-top (str (get user :karma-submission))]]]
-     [:div.control-group
-      [:div.controls
+      [:div.control-group
+       [:div.controls
         [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]
-     [:div.control-group
+      [:div.control-group
        [:label.control-label {:for "email"} "Email:"]
        [:div.controls
         [:label {:name "email" :type "text" :id "email"} (get user :email)]]]
-     [:div.control-group
+      [:div.control-group
        [:label.control-label {:for "profile"} "Profile:"]
        [:div.controls
         [:pre.span6 (get user :profile)]]]
@@ -119,51 +119,51 @@
        [:label.control-label {:for "gpg-pubkey"} "GPG Public Key"]
        [:div.controls
         [:pre.span6 (get user :gpg-pubkey)]]]
-     ]]))
+      ]]))
 
 (defn user-profile-view-2
   [user]
   (layout
-     [:table.table.table-bordered
-      [:thead
-       [:th (str "Profile for " (get user :username))]]
-      [:tbody
-        [:tr
-         [:td "Username:"]
-         [:td [:span.span6 (get user :username)]]]
-        [:tr
-         [:td "Created:"]
-         [:td [:span.span6 (get user :created)]]]
-        [:tr 
-         [:td "Comment Karma"]
-         [:td [:span.span6 (str (get user :karma-comment))]]]
-        [:tr
-         [:td]
-         [:td
-          [:span.span6
-            [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]]
-        [:tr
-         [:td "Submission Karma"]
-         [:td 
-          [:span.span6 (str (get user :karma-submission))]]]
-        [:tr
-         [:td]
-         [:td
-          [:span.span6 
-            [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]]
-         [:tr
-          [:td "Email:"]
-          [:td 
-           [:span.span6 (get user :email)]]]
-         [:tr
-          [:td "Profile:"]
-          [:td 
-           [:pre.span6 (get user :profile)]]]
-         [:tr
-          [:td "GPG Public Key"]
-          [:td
-           [:pre.span6 (get user :gpg-pubkey)]]]
-     ]]))
+    [:table.table.table-bordered
+     [:thead
+      [:th (str "Profile for " (get user :username))]]
+     [:tbody
+      [:tr
+       [:td "Username:"]
+       [:td [:span.span6 (get user :username)]]]
+      [:tr
+       [:td "Created:"]
+       [:td [:span.span6 (get user :created)]]]
+      [:tr 
+       [:td "Comment Karma"]
+       [:td [:span.span6 (str (get user :karma-comment))]]]
+      [:tr
+       [:td]
+       [:td
+        [:span.span6
+         [:a {:href (str "/user/comments/" (get user :username))} (str "Comments by " (get user :username))]]]]
+      [:tr
+       [:td "Submission Karma"]
+       [:td 
+        [:span.span6 (str (get user :karma-submission))]]]
+      [:tr
+       [:td]
+       [:td
+        [:span.span6 
+         [:a {:href (str "/user/submissions/" (get user :username))} (str "Submissions by " (get user :username))]]]]
+      [:tr
+       [:td "Email:"]
+       [:td 
+        [:span.span6 (get user :email)]]]
+      [:tr
+       [:td "Profile:"]
+       [:td 
+        [:pre.span6 (get user :profile)]]]
+      [:tr
+       [:td "GPG Public Key"]
+       [:td
+        [:pre.span6 (get user :gpg-pubkey)]]]
+      ]]))
 
 
 (defn user-get [username]
