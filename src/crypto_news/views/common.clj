@@ -28,7 +28,8 @@
        [:div.container
         [:ul.nav.pull-left.nav-pills
          [:li 
-          [:a {:href "/"} "&oplus; Cypherpunk News"]]
+          [:a {:href "/"}
+            [:img {:src "/img/logo.png"}] "&nbsp;Cypherpunk News"]]
          [:li
           [:a {:href "/new/"} "New Posts"]]
          (if (users/logged-in?) [:li [:a {:href "/post/new/"} "Submit"]])

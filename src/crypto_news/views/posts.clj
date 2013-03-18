@@ -94,7 +94,7 @@
     (layout
       (views-idx/render-index-post post-map)
       [:div.div-filler]
-      [:div.post-text (get post-map :text)]
+      [:pre.post-text (get post-map :text)]
       [:form {:method "POST" :action (str "/comment/" id "/")}
        [:input {:type "hidden" :name "parent-id" :value id}]
        [:input {:type "hidden" :name "post-id" :value id}]

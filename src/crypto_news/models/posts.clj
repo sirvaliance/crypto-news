@@ -68,10 +68,10 @@
           )))))
 
 
-(defn get-post-sort []
+(defn get-posts-by-date []
   (mq/with-collection "posts"
                       (mq/find {})
-                      (mq/sort {:karma -1})))
+                      (mq/sort {:created -1})))
 
 ;; Most algos use time in hours, not minutes.
 ;; Test and tweak

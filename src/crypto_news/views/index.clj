@@ -28,7 +28,7 @@
       [:div.news-item-link
        [:a {:href (get post-map :url)} (get post-map :title)]
        [:span "&nbsp;"]
-       [:span (str "(" (get post-map :url-host) ")")]]
+       [:span (if (.equals "" (get post-map :url-host)) "" (str "(" (get post-map :url-host) ")"))]]
       [:div.news-item-info
        [:span (str (get post-map :karma) " Points")]
        [:span "by"]
@@ -42,6 +42,14 @@
 (defn index []
   (layout
     (let [posts-list (posts/get-post-with-algo)]
+      ; Should contain obvious ranking algorithm
+      ; http://amix.dk/blog/post/19574
+      (for [i (range (count posts-list))]
+        (render-index-post (nth posts-list i) (+ i 1))))))
+
+(defn new-posts []
+  (layout
+    (let [posts-list (posts/get-posts-by-date)]
       ; Should contain obvious ranking algorithm
       ; http://amix.dk/blog/post/19574
       (for [i (range (count posts-list))]

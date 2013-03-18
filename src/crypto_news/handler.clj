@@ -16,6 +16,7 @@
 
 (defroutes app-routes
            (GET "/" [] (views-inx/index))
+           (GET "/new/" [] (views-inx/new-posts))
            (GET "/login/" [] (views-ath/login-get))
            (POST "/login/" [input-username input-password] (views-ath/login-post 
                                                              input-username 
