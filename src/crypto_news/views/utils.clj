@@ -1,6 +1,7 @@
 (ns crypto-news.views.utils
   (:require [clj-time.core :as cltime]
             [clj-time.coerce :as t-coerce]))
+
 (defn time-diff [start-date]
   (long (cltime/in-minutes 
           (cltime/interval 

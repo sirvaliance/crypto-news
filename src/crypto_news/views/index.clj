@@ -36,7 +36,8 @@
         [:a {:href (str "/user/" (get post-map :submitter) "/")} (get post-map :submitter)]]
        [:span (string-date-formater (get post-map :created))]
        [:span
-        [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]]]]))
+        [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]
+       [:span (str "&nbsp;" (get post-map :compu-karma))]]]]))
 
 (defn index []
   (layout

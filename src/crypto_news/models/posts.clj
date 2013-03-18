@@ -76,7 +76,7 @@
 ;; Most algos use time in hours, not minutes.
 ;; Test and tweak
 (defn compute-gravity [karma post-time]
-  (/ karma (expt (utils/time-diff post-time) 1.8)))
+  (/ karma (expt (+ (/ (utils/time-diff post-time) 60.0) 2.0) 1.8)))
 
 (defn post-gravity [post]
   (let [compu-karma (compute-gravity 
