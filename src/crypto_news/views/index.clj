@@ -22,8 +22,9 @@
      [:div.span12
       [:div.news-item-vote
        [:span.news-num (if (seq post-num) (str (first post-num)))]
-       [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
-       [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]]
+       [:div.arrows
+         [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
+         [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]]]
       [:div.news-item-link
        [:a {:href (get post-map :url)} (get post-map :title)]
        [:span "&nbsp;"]
@@ -39,7 +40,7 @@
 
 (defn index []
   (layout
-    (let [posts-list (posts/get-post-all)]
+    (let [posts-list (posts/get-post-with-algo)]
       ; Should contain obvious ranking algorithm
       ; http://amix.dk/blog/post/19574
       (for [i (range (count posts-list))]

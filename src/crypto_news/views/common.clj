@@ -17,7 +17,7 @@
 (defn layout [& content]
   (html5
     [:head
-     [:title "Crypto News"]
+     [:title "Cypherpunk News"]
      (include-css "/css/bootstrap.min.css")
      (include-css "/css/bootstrap-responsive.min.css")
      (include-css "/css/style.css")
@@ -28,7 +28,7 @@
        [:div.container
         [:ul.nav.pull-left.nav-pills
          [:li 
-          [:a {:href "/"} "Crypto News"]]
+          [:a {:href "/"} "&oplus; Cypherpunk News"]]
          [:li
           [:a {:href "/new/"} "New Posts"]]
          (if (users/logged-in?) [:li [:a {:href "/post/new/"} "Submit"]])

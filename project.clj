@@ -8,7 +8,8 @@
                  [clj-time "0.4.4"]
                  [clojurewerkz/urly "1.0.0"]
                  [markdown-clj "0.9.19"]
-                 [org.clojure/data.json "0.2.1"]]
+                 [org.clojure/data.json "0.2.1"]
+                 [org.clojure/clojure-contrib "1.2.0"]]
   :plugins [[lein-ring "0.8.2"]]
   :ring {:handler crypto-news.handler/app}
   :profiles

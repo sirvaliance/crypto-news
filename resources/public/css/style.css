@@ -60,7 +60,9 @@ body {
 .arrow-up:hover, .arrow-down:hover {
     text-decoration: none;
 }
-
+.arrows {
+    min-height: 60px;
+}
 .comment-arrows {
     float: left;
     min-height: 60px;

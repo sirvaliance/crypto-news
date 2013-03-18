@@ -1,14 +1,18 @@
 (ns crypto-news.models.posts
-  (:use monger.operators)
+  (:use monger.operators
+        clojure.contrib.math)
+  (:refer-clojure :exclude [sort find])
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [monger.conversion :as mcon]
             [monger.util :as mu]
+            [monger.query :as mq]
             [noir.session :as session]
             [clj-time.core :as cltime]
             [monger.joda-time]
             [crypto-news.models.connection :as conn]
             [crypto-news.models.users :as users]
+            [crypto-news.views.utils :as utils]
             [clojurewerkz.urly.core :as urly]))
 
 (conn/db-connect)
@@ -64,3 +68,22 @@
           )))))
 
 
+(defn get-post-sort []
+  (mq/with-collection "posts"
+                      (mq/find {})
+                      (mq/sort {:karma -1})))
+
+;; Most algos use time in hours, not minutes.
+;; Test and tweak
+(defn compute-gravity [karma post-time]
+  (/ karma (expt (utils/time-diff post-time) 1.8)))
+
+(defn post-gravity [post]
+  (let [compu-karma (compute-gravity 
+                      (get post :karma)
+                      (get post :created))]
+    (assoc post :compu-karma compu-karma)))
+
+(defn get-post-with-algo []
+  (let [posts (mc/find-maps "posts")]
+    (sort-by :compu-karma > (map post-gravity posts))))
