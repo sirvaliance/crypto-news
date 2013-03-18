@@ -23,8 +23,8 @@
       [:div.news-item-vote
        [:span.news-num (if (seq post-num) (str (first post-num)))]
        [:div.arrows
-         [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
-         [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]]]
+        [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
+        [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]]]
       [:div.news-item-link
        [:a {:href (get post-map :url)} (get post-map :title)]
        [:span "&nbsp;"]

@@ -140,6 +140,17 @@ body {
 #main-footer {
     margin-top: 20px;
     border-top: solid 2px #ddd;
+    padding: 10px 0;
+    text-align: center;
 }
 
+#main-footer ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
 
+#main-footer li {
+    display: inline;
+    padding-right: 20px;
+}

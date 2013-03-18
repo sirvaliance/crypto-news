@@ -29,7 +29,7 @@
         [:ul.nav.pull-left.nav-pills
          [:li 
           [:a {:href "/"}
-            [:img {:src "/img/logo.png"}] "&nbsp;Cypherpunk News"]]
+           [:img {:src "/img/logo.png"}] "&nbsp;Cypherpunk News"]]
          [:li
           [:a {:href "/new/"} "New Posts"]]
          (if (users/logged-in?) [:li [:a {:href "/post/new/"} "Submit"]])
@@ -43,13 +43,19 @@
            (html5 [:li
                    [:a {:href "/login/"} "Login"]]
                   [:li
-                   [:a {:href "/signup/"} "Signup"]]))]
-        ]]]
-
+                   [:a {:href "/signup/"} "Signup"]]))]]]]
      [:div#main-wrapper.container.container-fluid
       [:div#content
        content]]
-     [:div#main-footer.container.container-fludi
-      "Footer Stuff"]]))
+     [:div#main-footer.container.container-fluid
+      [:ul
+       [:li
+        [:a {:href "https://crypto.is"} "Crypto.is"]]
+       [:li "|"]
+       [:li
+        [:a {:href "https://blog.crypto.is"} "Crypto.is Blog"]]
+       [:li "|"]
+       [:li
+        [:a {:href "https://twitter.com/cryptodotis"} "Twitter"]]]]]))
 
 
