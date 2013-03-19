@@ -1,17 +1,6 @@
 - CONVERT SESSIONS TO SIGNED COOKIES
 
-
-x Handle actions from users who are not logged in
-- Gravity algo
-x Downvotes
+x Gravity algo
 - Markdown for posts/comments
-x Profile viewing
 - Double-check escaping (profiles don't escape yet
-x Fix design issues
-x Change design for users who are not logged in
-
-
-- Ask CN vs. Link submission
-
-
-- Inc/dec user's comment and submission karma
+- Appropriate cookie plan for sessions

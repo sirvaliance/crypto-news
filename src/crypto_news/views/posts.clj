@@ -104,17 +104,17 @@
        [:div.control-group
         [:div.controls
          [:button.btn {:type "submit"} "Add Comment"]]]]
-      (build-comment-tree id comments)
+      [:div.comment-main
+        (build-comment-tree id comments)]
       )))
 
 
 (defn render-comment [com-map]
   (html5
-
     [:div.comment-block
      [:div.comment
       [:div.comment-head
-       [:span
+       [:div.comment-arrows
         (if (users/logged-in?)
           (html5
             [:a.arrow-up {:href (str "/comment/" (get com-map :_id) "/vote/up/")} "&#x25B2;"]
@@ -131,8 +131,10 @@
 
 
 (defn comment-get [id]
-  (let [com-map (comnt/get-comment-by-id id)]
+  (let [com-map (comnt/get-comment-by-id id)
+        post-map (posts/get-post-by-id (get com-map :post-id))]
     (layout
+      [:span.italics "From Post&nbsp;" [:a {:href (str "/post/" (get post-map :_id) "/")} (get post-map :title)]]
       (render-comment com-map)
       [:form {:method "POST" :action (str "/comment/" id "/")}
        [:input {:type "hidden" :name "parent-id" :value (get com-map :_id)}]

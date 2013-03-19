@@ -21,7 +21,6 @@
     [:div.news-item.row-fluid
      [:div.span12
       [:div.news-item-vote
-       [:span.news-num (if (seq post-num) (str (first post-num)))]
        [:div.arrows
         [:a.arrow-up {:href (str "/post/" (get post-map :_id) "/vote/up/")} "&#x25B2;"]
         [:a.arrow-down {:href (str "/post/" (get post-map :_id) "/vote/down/")} "&#x25BC;"]]]
@@ -37,7 +36,8 @@
        [:span (string-date-formater (get post-map :created))]
        [:span
         [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]
-       [:span (str "&nbsp;" (get post-map :compu-karma))]]]]))
+       [:span (str "&nbsp;" (get post-map :compu-karma))]]
+       [:span.news-num (if (seq post-num) (str (first post-num)))]]]))
 
 (defn index []
   (layout
