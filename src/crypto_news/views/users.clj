@@ -72,7 +72,7 @@
         profile (escape-html profile)
         gpg-pubkey (escape-html gpg-pubkey)]
     (do
-      (users/update-user    username
+      (users/update-user username
                          email
                          profile
                          gpg-pubkey)

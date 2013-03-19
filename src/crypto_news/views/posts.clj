@@ -51,7 +51,11 @@
       (resp/redirect "/post/new/")
       (do 
         ;Make sure the user is logged in
-        (let [id (posts/new-post (escape-html title) (escape-html url) (escape-html post-text) (users/get-username))]
+        (let [id (posts/new-post 
+                   (escape-html title) 
+                   (escape-html url) 
+                   (escape-html post-text) 
+                   (users/get-username))]
           (resp/redirect (str "/post/" id "/")))))
     (resp/redirect "/login/")))
 ; Check if url has already been used, if so, redirect to that submission
@@ -105,7 +109,7 @@
         [:div.controls
          [:button.btn {:type "submit"} "Add Comment"]]]]
       [:div.comment-main
-        (build-comment-tree id comments)]
+       (build-comment-tree id comments)]
       )))
 
 

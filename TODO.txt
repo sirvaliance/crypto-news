@@ -2,5 +2,4 @@
 
 x Gravity algo
 - Markdown for posts/comments
-- Double-check escaping (profiles don't escape yet
 - Appropriate cookie plan for sessions
