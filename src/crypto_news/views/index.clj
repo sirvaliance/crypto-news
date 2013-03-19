@@ -36,7 +36,9 @@
        [:span (string-date-formater (get post-map :created))]
        [:span
         [:a {:href (str "/post/" (get post-map :_id) "/")} (str (get post-map :comments) " Comments")]]
-       [:span (str "&nbsp;" (get post-map :compu-karma))]]
+       ;; For debugging computed score
+       ;; [:span (str "&nbsp;" (get post-map :compu-karma))]
+       ]
        [:span.news-num (if (seq post-num) (str (first post-num)))]]]))
 
 (defn index []

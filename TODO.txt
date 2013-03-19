@@ -1,5 +1,5 @@
 - CONVERT SESSIONS TO SIGNED COOKIES
 
-x Gravity algo
 - Markdown for posts/comments
 - Appropriate cookie plan for sessions
+- Cache Index data
