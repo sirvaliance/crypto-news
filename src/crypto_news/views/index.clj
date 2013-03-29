@@ -8,7 +8,6 @@
         crypto-news.settings)
   (:require [noir.response :as resp]
             [noir.session :as session]
-            [noir.cookies :as cook]
             [noir.util.crypt :as crypt]
             [clj-time.core :as cltime]
             [clj-time.coerce :as t-coerce]

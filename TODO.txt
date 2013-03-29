@@ -3,3 +3,5 @@
 - Markdown for posts/comments
 - Appropriate cookie plan for sessions
 - Cache Index data
+
+- Manage a login count for too many logins

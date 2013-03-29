@@ -4,7 +4,6 @@
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [noir.session :as session]
-            [noir.cookies :as cook]
             [noir.response :as nr]
             [clj-time.core :as cltime]
             [crypto-news.models.connection :as conn]))
@@ -12,9 +11,7 @@
 (conn/db-connect)
 
 (defn logged-in? []
-  (let [li (cook/get-signed 
-             (str cookie-key (session/get :login-time))
-             :li)]
+  (let [li (session/get :li)]
     (if-not (nil? li)
       (if (.equals "true" li)
         true
@@ -29,10 +26,6 @@
 (defn log-out! []
   (do
     (session/clear!)
-    (cook/put-signed!
-      (str cookie-key (session/get :login-time))
-      :li 
-      "false")
     (nr/redirect "/")))
 
 (defn new-user [user-map]

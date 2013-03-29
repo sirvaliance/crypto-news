@@ -54,4 +54,5 @@
     app-routes
     handler/site
     cook/wrap-noir-cookies
-    (sesh/wrap-noir-session {:store (cookie-store {:key session-key})})))
+    (sesh/wrap-noir-session {:store (cookie-store {:key session-key})
+                             :cookie-attrs {:max-age (* 60 60 60 24 7)}})))

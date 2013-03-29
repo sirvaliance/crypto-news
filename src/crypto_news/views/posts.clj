@@ -8,7 +8,6 @@
         crypto-news.settings)
   (:require [noir.response :as resp]
             [noir.session :as session]
-            [noir.cookies :as cook]
             [noir.util.crypt :as crypt]
             [clj-time.core :as cltime]
             [clj-time.coerce :as t-coerce]
@@ -22,7 +21,6 @@
 (defn new-post-get[]
   (if-not (users/logged-in?)
     (resp/redirect "/login/")
-
     (layout
       [:form.form-horizontal {:method "POST" :action "/post/new/"}
        [:fieldset
