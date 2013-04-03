@@ -56,6 +56,9 @@
         [:a {:href "https://blog.crypto.is"} "Crypto.is Blog"]]
        [:li "|"]
        [:li
+        [:a {:href "https://github.com/sirvaliance/crypto-news/issues"} "Report A Bug"]]
+       [:li "|"]
+       [:li
         [:a {:href "https://twitter.com/cryptodotis"} "Twitter"]]]]]))
 
 
