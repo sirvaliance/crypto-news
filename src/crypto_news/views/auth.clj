@@ -95,7 +95,7 @@
           (do
             (users/new-user {:username (escape-html username)
                              :password hashpass})
-            (login-post (escape-html username) hashpass)))
+            (resp/redirect "/login/")))
         (signup-get "Passwords do not match"))
       (signup-get "Username exists"))))
 
